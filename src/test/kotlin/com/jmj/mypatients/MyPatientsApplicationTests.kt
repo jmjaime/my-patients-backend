@@ -1,4 +1,4 @@
-package com.jmj.myPatients
+package com.jmj.mypatients
 
 import org.junit.Test
 import org.junit.runner.RunWith
