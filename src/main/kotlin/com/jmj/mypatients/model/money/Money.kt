@@ -1,7 +1,13 @@
 package com.jmj.mypatients.model.money
 
-class Money(val value: Double) {
+import java.math.BigDecimal
 
-    constructor(value: Int) : this(value.toDouble())
+data class Money(val value: BigDecimal) {
+
+    constructor(value: Int) : this(value.toBigDecimal())
+
+    init {
+        check(value >= BigDecimal.ZERO)
+    }
 
 }

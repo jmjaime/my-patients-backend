@@ -5,6 +5,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.jmj.mypatients.model.treatment.Treatment
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
-data class TreatmentModel(val id: Long, val officeId: Long, val patientSourceId: Long, val patientId: Long)
+data class TreatmentModel(val id: String, val officeId: String, val patientSourceId: String, val patient: String)
 
-fun Treatment.toModel() = TreatmentModel(this.id, this.defaultOffice.id, this.derivation.patientSource.id, this.patientId)
+fun Treatment.toModel() = TreatmentModel(this.id, this.defaultOfficeId, this.derivation.patientSourceId, this.patient.name)

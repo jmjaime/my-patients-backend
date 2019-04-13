@@ -1,21 +1,17 @@
 package com.jmj.mypatients.model.treatment
 
-import com.jmj.mypatients.model.patient.Patient
-
 interface Treatments {
 
-    fun nextId(): Long
-
-    fun find(treatmentId: Long): Treatment?
+    fun find(treatmentId: String): Treatment?
 
     fun save(treatment: Treatment)
 
-    fun findByPatient(patient: Patient): Treatment?
+    fun findByPatientName(patientName: String): Treatment?
 
     fun findAll(): List<Treatment>
 
-    fun findByIdAndProfessionalId(treatmentId: Long, professionalId: Long): Treatment?
+    fun findByIdAndProfessionalId(treatmentId: String, professionalId: String): Treatment?
 
-    fun findByProfessional(professionalId: Long): List<Treatment>
+    fun findByProfessional(professionalId: String): List<Treatment>
 
 }

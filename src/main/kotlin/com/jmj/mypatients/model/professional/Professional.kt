@@ -1,3 +1,3 @@
 package com.jmj.mypatients.model.professional
 
-class Professional(val id: Long, val name: String)
+class Professional(val id: String, val name: String)

@@ -3,6 +3,7 @@ package com.jmj.mypatients.model.actions
 import com.jmj.mypatients.model.money.Money
 import com.jmj.mypatients.model.professional.ProfessionalFinder
 import com.jmj.mypatients.model.treatment.TreatmentService
+import java.math.BigDecimal
 import java.time.LocalDate
 
 class NewSessionAction(private val treatmentService: TreatmentService, private val professionalFinder: ProfessionalFinder) {
@@ -18,4 +19,4 @@ class NewSessionAction(private val treatmentService: TreatmentService, private v
 
 }
 
-data class NewSessionRequest(val professionalId: Long, val treatmentId: Long, val officeId: Long, val patient: String, val date: LocalDate, val fee: Double, val paid: Boolean)
+data class NewSessionRequest(val professionalId: String, val treatmentId: String, val officeId: String, val patient: String, val date: LocalDate, val fee: BigDecimal, val paid: Boolean)

@@ -2,5 +2,5 @@ package com.jmj.mypatients.model.professional.derivation
 
 import com.jmj.mypatients.model.money.Money
 
-class Derivation(val patientSource: PatientSource, val currentFee: Money) {
+class Derivation(val patientSourceId: String, val currentFee: Money) {
 }
