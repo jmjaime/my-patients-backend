@@ -8,7 +8,13 @@ import com.jmj.mypatients.model.treatment.account.Account
 import com.jmj.mypatients.model.treatment.session.Session
 import java.time.LocalDate
 
-class Treatment(val id: String, val professionalId: String, val patient: Patient, val defaultOfficeId: String, val derivation: Derivation, private val sessions: MutableList<Session> = mutableListOf()) {
+data class Treatment(val id: String, val professionalId: String, val patient: Patient, val defaultOfficeId: String, val derivation: Derivation, private val sessions: MutableList<Session> = mutableListOf()) {
+
+    init {
+        require( id.isNotBlank()) {"Id can not be blank"}
+        require( professionalId.isNotBlank()) {"Professional Id can not be blank"}
+        require( professionalId.isNotBlank()) {"Default Office Id can not be blank"}
+    }
 
     fun addSession(date: LocalDate, officeId: String = defaultOfficeId, fee: Money, paid: Boolean = false): Session {
         val sessionNumber = sessions.size + 1

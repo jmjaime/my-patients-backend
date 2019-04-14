@@ -40,7 +40,7 @@ class MyPatientsInfrastructureConfiguration {
     fun professionals(): Professionals = InMemoryProfessionals(mutableMapOf(Pair(professionalId, Professional(professionalId, "Professional"))))
 
     @Bean
-    fun patientSources(): PatientSources = InMemoryPatientSources(mutableMapOf(Pair(patientSourceId, PatientSource(id = patientSourceId, name = "Particular", fee = Money(0), tax = BigDecimal.ZERO, professionalId = professionalId))))
+    fun patientSources(): PatientSources = InMemoryPatientSources(mutableMapOf(Pair(patientSourceId, PatientSource(id = patientSourceId, source = "Particular", fee = Money(0), tax = BigDecimal.ZERO, professionalId = professionalId))))
 
     @Bean
     fun objectMapper(): ObjectMapper =

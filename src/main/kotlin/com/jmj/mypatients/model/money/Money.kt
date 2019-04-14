@@ -7,7 +7,7 @@ data class Money(val value: BigDecimal) {
     constructor(value: Int) : this(value.toBigDecimal())
 
     init {
-        check(value >= BigDecimal.ZERO)
+        require(value >= BigDecimal.ZERO) { "Money value should be >= 0"}
     }
 
 }
