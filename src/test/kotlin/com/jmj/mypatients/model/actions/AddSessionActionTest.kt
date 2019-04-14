@@ -5,16 +5,16 @@ import com.jmj.mypatients.model.errors.ObjectNotFoundException
 import com.jmj.mypatients.model.professional.ProfessionalFinder
 import com.jmj.mypatients.model.treatment.TreatmentService
 import com.jmj.mypatients.model.treatment.Treatments
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import java.time.LocalDate
 
-class NewSessionActionTest {
+class AddSessionActionTest {
 
     private val notPaid = false
     private val date = LocalDate.now()
-    private lateinit var newSessionAction: NewSessionAction
+    private lateinit var addSessionAction: AddSessionAction
     private lateinit var treatmentService: TreatmentService
     private lateinit var professionalFinder: ProfessionalFinder
 
@@ -23,7 +23,7 @@ class NewSessionActionTest {
         val treatments = createTreatments()
         professionalFinder = createProfessionalFinder(treatments)
         treatmentService = TreatmentService(treatments) { sessionId }
-        newSessionAction = NewSessionAction(treatmentService, professionalFinder)
+        addSessionAction = AddSessionAction(treatmentService, professionalFinder)
     }
 
     private fun createProfessionalFinder(treatments: Treatments) = ProfessionalFinder(createProfessionals(), createOffices(), createPatientSources(), treatments)
@@ -31,38 +31,40 @@ class NewSessionActionTest {
     @Test
     fun `new session`() {
         val request = givenANewSessionRequest()
-        val sessionModel = newSessionAction.execute(request)
+        val sessionModel = addSessionAction(request)
         assertSession(sessionModel, request)
     }
 
-    private fun assertSession(sessionModel: SessionModel, request: NewSessionRequest) {
-        Assertions.assertThat(sessionModel.date).isEqualTo(request.date)
-        Assertions.assertThat(sessionModel.fee).isEqualTo(request.fee)
-        Assertions.assertThat(sessionModel.number).isEqualTo(firstSession)
-        Assertions.assertThat(sessionModel.officeId).isEqualTo(request.officeId)
-        Assertions.assertThat(sessionModel.paid).isEqualTo(request.paid)
+    private fun assertSession(sessionModel: SessionModel, request: AddSessionRequest) {
+        assertThat(sessionModel.date).isEqualTo(request.date)
+        assertThat(sessionModel.fee).isEqualTo(request.fee)
+        assertThat(sessionModel.number).isEqualTo(firstSession)
+        assertThat(sessionModel.officeId).isEqualTo(request.officeId)
+        assertThat(sessionModel.paid).isEqualTo(request.paid)
+        assertThat(sessionModel.treatmentId).isEqualTo(request.treatmentId)
+
     }
 
     @Test(expected = ObjectNotFoundException::class)
     fun `new session with invalid office`() {
         val request = givenANewSessionRequest(office = notExists)
-        newSessionAction.execute(request)
+        addSessionAction(request)
     }
 
 
     @Test(expected = ObjectNotFoundException::class)
     fun `new session with invalid professional`() {
         val request = givenANewSessionRequest( professional = notExists)
-        newSessionAction.execute(request)
+        addSessionAction(request)
     }
 
     @Test(expected = ObjectNotFoundException::class)
     fun `new session with invalid treatment`() {
         val request = givenANewSessionRequest(treatment = notExists)
-        newSessionAction.execute(request)
+        addSessionAction(request)
     }
 
-    private fun givenANewSessionRequest(professional: String = professionalId, treatment: String = treatmentId, office: String = officeId, patient: String = patientId) =
-            NewSessionRequest(professional, treatment, office, patient, date, patientSourceFee.value, notPaid)
+    private fun givenANewSessionRequest(professional: String = professionalId, treatment: String = treatmentId, office: String = officeId) =
+            AddSessionRequest(professional, treatment, office, date, patientSourceFee.value, notPaid)
 
 }

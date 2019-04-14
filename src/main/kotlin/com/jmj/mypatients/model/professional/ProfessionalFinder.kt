@@ -7,7 +7,6 @@ import com.jmj.mypatients.model.professional.office.Office
 import com.jmj.mypatients.model.professional.office.Offices
 import com.jmj.mypatients.model.treatment.Treatment
 import com.jmj.mypatients.model.treatment.Treatments
-import java.util.*
 
 class ProfessionalFinder(private val professionals: Professionals, private val offices: Offices, private val patientSources: PatientSources, private val treatments: Treatments) {
 

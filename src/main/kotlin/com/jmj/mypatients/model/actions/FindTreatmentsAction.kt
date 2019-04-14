@@ -4,9 +4,9 @@ import com.jmj.mypatients.model.professional.ProfessionalFinder
 
 class FindTreatmentsAction(private val professionalFinder: ProfessionalFinder) {
 
-    fun execute(findTreatmentsRequest: FindTreatmentsRequest): List<TreatmentModel> {
+    operator fun invoke(findTreatmentsRequest: FindTreatmentsRequest): List<TreatmentSmallModel> {
         val professional = professionalFinder.findById(findTreatmentsRequest.professionalId)
-        return professionalFinder.findTreatmentByProfessional(professional).map { it.toModel() }
+        return professionalFinder.findTreatmentByProfessional(professional).map { it.toSmallModel() }
     }
 }
 

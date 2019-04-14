@@ -26,27 +26,29 @@ class InitTreatmentActionTest {
     @Test
     fun `init a treatment`() {
         val initTreatmentRequest = givenARequest()
-        val treatment = initTreatmentAction.execute(initTreatmentRequest)
+        val treatment = initTreatmentAction(initTreatmentRequest)
         assertTreatment(treatment)
     }
 
     @Test(expected = ObjectNotFoundException::class)
     fun `init a treatment with invalid office`() {
         val initTreatmentRequest = givenARequest(office = notExists)
-        initTreatmentAction.execute(initTreatmentRequest)
+        initTreatmentAction(initTreatmentRequest)
     }
 
     @Test(expected = ObjectNotFoundException::class)
     fun `init a treatment with invalid patient source`() {
         val initTreatmentRequest = givenARequest(patientSource = notExists)
-        initTreatmentAction.execute(initTreatmentRequest)
+        initTreatmentAction(initTreatmentRequest)
     }
 
     private fun assertTreatment(treatment: TreatmentModel) {
         Assertions.assertThat(treatment.id).isEqualTo(treatmentId)
-        Assertions.assertThat(treatment.officeId).isEqualTo(officeId)
+        Assertions.assertThat(treatment.office.id).isEqualTo(officeId)
+        Assertions.assertThat(treatment.office.description).isEqualTo(officeName)
         Assertions.assertThat(treatment.patient).isEqualTo(patientName)
-        Assertions.assertThat(treatment.patientSourceId).isEqualTo(patientSourceId)
+        Assertions.assertThat(treatment.derivation.patientSourceId).isEqualTo(patientSourceId)
+        Assertions.assertThat(treatment.derivation.currentFee).isEqualTo(patientSourceFee.value)
 
     }
 

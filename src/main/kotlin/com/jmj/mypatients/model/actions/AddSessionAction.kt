@@ -6,17 +6,17 @@ import com.jmj.mypatients.model.treatment.TreatmentService
 import java.math.BigDecimal
 import java.time.LocalDate
 
-class NewSessionAction(private val treatmentService: TreatmentService, private val professionalFinder: ProfessionalFinder) {
+class AddSessionAction(private val treatmentService: TreatmentService, private val professionalFinder: ProfessionalFinder) {
 
-    fun execute(newSessionRequest: NewSessionRequest): SessionModel {
-        with(newSessionRequest) {
+    operator fun invoke(addSessionRequest: AddSessionRequest): SessionModel {
+        with(addSessionRequest) {
             val professional = professionalFinder.findById(professionalId)
             val office = professionalFinder.findProfessionalOfficeById(professional, officeId)
             val treatment = professionalFinder.getProfessionalTreatmentById(professional, treatmentId)
-            return treatmentService.newSession(treatment, date, office, Money(fee), paid).toModel()
+            return treatmentService.newSession(treatment, date, office, Money(fee), paid).toModel(treatmentId)
         }
     }
 
 }
 
-data class NewSessionRequest(val professionalId: String, val treatmentId: String, val officeId: String, val patient: String, val date: LocalDate, val fee: BigDecimal, val paid: Boolean)
+data class AddSessionRequest(val professionalId: String, val treatmentId: String, val officeId: String, val date: LocalDate, val fee: BigDecimal, val paid: Boolean)

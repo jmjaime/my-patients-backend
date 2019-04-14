@@ -1,10 +1,13 @@
 package com.jmj.mypatients.model.actions
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
-import com.fasterxml.jackson.databind.annotation.JsonNaming
+import com.jmj.mypatients.model.professional.office.Office
 import com.jmj.mypatients.model.treatment.Treatment
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
-data class TreatmentModel(val id: String, val officeId: String, val patientSourceId: String, val patient: String)
+data class TreatmentSmallModel(val id: String, val patient: String)
 
-fun Treatment.toModel() = TreatmentModel(this.id, this.defaultOfficeId, this.derivation.patientSourceId, this.patient.name)
+data class TreatmentModel(val id: String, val office: OfficeModel, val derivation: DerivationModel, val patient: String)
+
+
+fun Treatment.toSmallModel() = TreatmentSmallModel(this.id, this.patient.name)
+
+fun Treatment.toModel(defaultOffice: Office) = TreatmentModel(this.id, defaultOffice.toModel(), this.derivation.toModel(), this.patient.name)

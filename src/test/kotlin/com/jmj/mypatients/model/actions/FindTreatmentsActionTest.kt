@@ -23,21 +23,19 @@ class FindTreatmentsActionTest {
 
     @Test
     fun `when there are no treatments returns empty`() {
-        val treatments = findTreatmentsAction.execute(FindTreatmentsRequest(professionalId))
+        val treatments = findTreatmentsAction(FindTreatmentsRequest(professionalId))
         Assertions.assertThat(treatments).isEmpty()
     }
 
     @Test
     fun `when there a treatment returns it`() {
         treatments.save(defaultTreatment())
-        val treatments = findTreatmentsAction.execute(FindTreatmentsRequest(professionalId))
+        val treatments = findTreatmentsAction(FindTreatmentsRequest(professionalId))
         Assertions.assertThat(treatments).isNotEmpty
         Assertions.assertThat(treatments.size).isEqualTo(1)
         treatments.firstOrNull()?.let {
             Assertions.assertThat(it.id).isEqualTo(treatmentId)
-            Assertions.assertThat(it.officeId).isEqualTo(officeId)
             Assertions.assertThat(it.patient).isEqualTo(patientName)
-            Assertions.assertThat(it.patientSourceId).isEqualTo(patientSourceId)
         }
     }
 
