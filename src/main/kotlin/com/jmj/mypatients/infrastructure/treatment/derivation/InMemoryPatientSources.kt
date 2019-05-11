@@ -4,6 +4,9 @@ import com.jmj.mypatients.model.professional.derivation.PatientSource
 import com.jmj.mypatients.model.professional.derivation.PatientSources
 
 class InMemoryPatientSources(private val patientSources: MutableMap<String, PatientSource> = mutableMapOf()) : PatientSources {
+
+    override fun findByProfessionalId(professionalId: String) = patientSources.values.filter { it.professionalId == professionalId }
+
     override fun save(patientSource: PatientSource) {
         patientSources[patientSource.id] = patientSource
     }

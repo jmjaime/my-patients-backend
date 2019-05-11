@@ -26,6 +26,8 @@ dependencies {
 	testImplementation 'io.projectreactor:reactor-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'org.assertj:assertj-core:3.11.1'
+	testImplementation 'com.nhaarman:mockito-kotlin:1.6.0'
+
 }
 
 compileKotlin {

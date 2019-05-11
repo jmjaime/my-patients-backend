@@ -1,28 +1,33 @@
 package com.jmj.mypatients.model.actions
 
 import com.jmj.mypatients.*
+import com.jmj.mypatients.model.actions.models.SessionModel
 import com.jmj.mypatients.model.errors.ObjectNotFoundException
+import com.jmj.mypatients.model.events.EventPublisher
 import com.jmj.mypatients.model.professional.ProfessionalFinder
 import com.jmj.mypatients.model.treatment.TreatmentService
 import com.jmj.mypatients.model.treatment.Treatments
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
-import java.time.LocalDate
+import org.mockito.Mockito
+import java.time.Clock
 
 class AddSessionActionTest {
 
     private val notPaid = false
-    private val date = LocalDate.now()
+    private val date = Clock.systemDefaultZone().instant()
     private lateinit var addSessionAction: AddSessionAction
     private lateinit var treatmentService: TreatmentService
     private lateinit var professionalFinder: ProfessionalFinder
+    private lateinit var eventPublisher: EventPublisher
 
     @Before
     fun setUp() {
         val treatments = createTreatments()
         professionalFinder = createProfessionalFinder(treatments)
-        treatmentService = TreatmentService(treatments) { sessionId }
+        eventPublisher = Mockito.mock(EventPublisher::class.java)
+        treatmentService = TreatmentService(treatments, eventPublisher) { sessionId }
         addSessionAction = AddSessionAction(treatmentService, professionalFinder)
     }
 
@@ -42,7 +47,6 @@ class AddSessionActionTest {
         assertThat(sessionModel.officeId).isEqualTo(request.officeId)
         assertThat(sessionModel.paid).isEqualTo(request.paid)
         assertThat(sessionModel.treatmentId).isEqualTo(request.treatmentId)
-
     }
 
     @Test(expected = ObjectNotFoundException::class)
@@ -54,7 +58,7 @@ class AddSessionActionTest {
 
     @Test(expected = ObjectNotFoundException::class)
     fun `new session with invalid professional`() {
-        val request = givenANewSessionRequest( professional = notExists)
+        val request = givenANewSessionRequest(professional = notExists)
         addSessionAction(request)
     }
 

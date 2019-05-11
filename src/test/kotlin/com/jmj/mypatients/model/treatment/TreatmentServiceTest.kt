@@ -2,16 +2,18 @@ package com.jmj.mypatients.model.treatment
 
 import com.jmj.mypatients.*
 import com.jmj.mypatients.model.errors.ObjectAlreadyExistsException
+import com.jmj.mypatients.model.events.EventPublisher
+import com.jmj.mypatients.model.events.SessionCreated
 import com.jmj.mypatients.model.treatment.session.Session
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
-import java.time.LocalDate
+import java.time.Clock
 
 class TreatmentServiceTest {
 
-    private val date = LocalDate.now()
+    private val date = Clock.systemDefaultZone().instant()
     private val notPaid = false
     private val professional = defaultProfessional()
     private val patientSource = defaultPatientSource()
@@ -20,11 +22,14 @@ class TreatmentServiceTest {
 
     private lateinit var treatmentService: TreatmentService
     private lateinit var treatments: Treatments
+    private lateinit var eventPublisher: EventPublisher
+
 
     @Before
     fun setUp() {
         treatments = mockTreatments()
-        treatmentService = TreatmentService(treatments) { treatmentId }
+        eventPublisher = Mockito.mock(EventPublisher::class.java)
+        treatmentService = TreatmentService(treatments, eventPublisher) { treatmentId }
     }
 
     @Test
@@ -54,6 +59,8 @@ class TreatmentServiceTest {
         assertThat(session.officeId).isEqualTo(officeId)
         assertThat(session.paid).isEqualTo(notPaid)
         assertThat(session.number).isEqualTo(firstSession)
+        val expectedSessionCreatedEvent = SessionCreated(professionalId, treatmentId, 1)
+        Mockito.verify(eventPublisher, Mockito.times(1)).publish(expectedSessionCreatedEvent)
     }
 
     private fun givenTreatmentForPatient() {

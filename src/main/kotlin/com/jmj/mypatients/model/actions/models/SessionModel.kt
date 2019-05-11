@@ -1,12 +1,12 @@
-package com.jmj.mypatients.model.actions
+package com.jmj.mypatients.model.actions.models
 
 import com.jmj.mypatients.model.treatment.session.Session
 import java.math.BigDecimal
-import java.time.LocalDate
+import java.time.Instant
 
 data class SessionModel(val treatmentId: String,
                         val number: Int,
-                        val date: LocalDate,
+                        val date: Instant,
                         val officeId: String,
                         val fee: BigDecimal,
                         val paid: Boolean)

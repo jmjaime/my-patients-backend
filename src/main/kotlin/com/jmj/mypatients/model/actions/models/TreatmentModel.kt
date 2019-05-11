@@ -1,4 +1,4 @@
-package com.jmj.mypatients.model.actions
+package com.jmj.mypatients.model.actions.models
 
 import com.jmj.mypatients.model.professional.office.Office
 import com.jmj.mypatients.model.treatment.Treatment

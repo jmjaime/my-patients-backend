@@ -2,23 +2,29 @@ package com.jmj.mypatients.model.actions
 
 import com.jmj.mypatients.*
 import com.jmj.mypatients.infrastructure.treatment.InMemoryTreatments
+import com.jmj.mypatients.model.actions.models.TreatmentModel
 import com.jmj.mypatients.model.errors.ObjectNotFoundException
+import com.jmj.mypatients.model.events.EventPublisher
 import com.jmj.mypatients.model.professional.ProfessionalFinder
 import com.jmj.mypatients.model.treatment.TreatmentService
 import org.assertj.core.api.Assertions
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mockito
 
 class InitTreatmentActionTest {
 
     private lateinit var treatmentService: TreatmentService
     private lateinit var professionalFinder: ProfessionalFinder
     private lateinit var initTreatmentAction: InitTreatmentAction
+    private lateinit var eventPublisher: EventPublisher
+
 
     @Before
     fun setUp() {
         val treatments = InMemoryTreatments()
-        treatmentService = TreatmentService(treatments) { treatmentId }
+        eventPublisher = Mockito.mock(EventPublisher::class.java)
+        treatmentService = TreatmentService(treatments, eventPublisher) { treatmentId }
         professionalFinder = ProfessionalFinder(createProfessionals(), createOffices(), createPatientSources(), treatments)
         initTreatmentAction = InitTreatmentAction(treatmentService, professionalFinder)
     }

@@ -5,6 +5,8 @@ import com.jmj.mypatients.model.professional.office.Offices
 
 class InMemoryOffices(private val offices: MutableMap<String, Office> = mutableMapOf()) : Offices {
 
+    override fun findByProfessionalId(professionalId: String) = offices.values.filter { it.professionalId == professionalId }
+
     override fun findByIdAndProfessionalId(officeId: String, professionalId: String): Office? = offices.values.firstOrNull { it.id == officeId && it.professionalId == professionalId }
 
     override fun find(officeId: String): Office? = offices[officeId]

@@ -8,6 +8,9 @@ import com.jmj.mypatients.model.money.Money
 import com.jmj.mypatients.model.patient.Patient
 import com.jmj.mypatients.model.professional.Professional
 import com.jmj.mypatients.model.professional.Professionals
+import com.jmj.mypatients.model.professional.account.Account
+import com.jmj.mypatients.model.professional.account.derivation.PatientSourceAccount
+import com.jmj.mypatients.model.professional.account.office.OfficeAccount
 import com.jmj.mypatients.model.professional.derivation.Derivation
 import com.jmj.mypatients.model.professional.derivation.PatientSource
 import com.jmj.mypatients.model.professional.derivation.PatientSources
@@ -30,13 +33,17 @@ const val officeName = "Office1"
 
 const val patientSourceId = "24"
 const val patientSourceName = "Particular"
+
+const val officeAccountId = "34"
+const val patientSourceAccountId = "70"
+
 val patientSourceTax = TEN
 val patientSourceFee = Money(100)
 
 const val patientId = "1"
 const val patientName = "John"
 
-const val sessionId =  "77"
+const val sessionId = "77"
 
 
 fun createProfessionals(professionals: List<Professional> = listOf(defaultProfessional())): Professionals =
@@ -52,9 +59,12 @@ fun createTreatments(treatments: List<Treatment> = listOf(defaultTreatment())): 
         InMemoryTreatments().apply { treatments.forEach { save(it) } }
 
 fun defaultProfessional() = Professional(professionalId, professionalName)
-fun defaultOffice() = Office(officeId, officeName, professionalId)
+fun defaultOffice() = Office(officeId, officeName, professionalId, Money(100))
 fun defaultPatientSource() = PatientSource(patientSourceId, patientSourceName, patientSourceFee, patientSourceTax, professionalId)
 fun defaultDerivation() = Derivation(patientSourceId, patientSourceFee)
 fun defaultTreatment() = Treatment(treatmentId, professionalId, defaultPatient(), officeId, defaultDerivation(), mutableListOf())
 fun defaultPatient() = Patient(patientId, patientName)
+fun defaultOfficeAccount() = OfficeAccount(officeAccountId, professionalId, officeId)
+fun defaultPatientSourceAccount() = PatientSourceAccount(patientSourceAccountId, professionalId, patientSourceId)
+fun defaultAccount() = Account(professionalId)
 

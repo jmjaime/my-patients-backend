@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.jmj.mypatients.infrastructure.myPatientsApiV1BasePath
 import com.jmj.mypatients.model.actions.AddSessionAction
 import com.jmj.mypatients.model.actions.AddSessionRequest
-import com.jmj.mypatients.model.actions.SessionModel
+import com.jmj.mypatients.model.actions.models.SessionModel
 import org.springframework.hateoas.ResourceSupport
 import org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo
 import org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn
@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.math.BigDecimal
-import java.time.LocalDate
+import java.time.Instant
 
 @RestController
 @RequestMapping("$myPatientsApiV1BasePath/treatments/{treatmentId}/sessions")
@@ -26,7 +26,7 @@ class SessionController(private val addSessionAction: AddSessionAction) {
 
     @GetMapping("/{sessionId}")
     @PreAuthorize(PROFESSIONAL_PRE_AUTHORIZE)
-    fun getSession(@PathVariable professionalId: String, @PathVariable treatmentId: String, @PathVariable sessionId: String) = ResponseEntity.notFound()
+    fun getSession(@PathVariable professionalId: String, @PathVariable treatmentId: String, @PathVariable sessionNumber: Int) = ResponseEntity.notFound()
 
 
     @PostMapping
@@ -40,22 +40,21 @@ class SessionController(private val addSessionAction: AddSessionAction) {
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
 data class NewSessionRequest(val officeId: String,
-                             @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy") val date: LocalDate,
+                             @JsonFormat(shape = JsonFormat.Shape.NUMBER) val date: Instant,
                              val fee: BigDecimal,
                              val paid: Boolean)
 
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
-data class SessionResource(val number:Int,
-                        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")val date: LocalDate,
-                        val fee: BigDecimal,
-                        val paid: Boolean): ResourceSupport()
+data class SessionResource(val number: Int,
+                           @JsonFormat(shape = JsonFormat.Shape.NUMBER) val date: Instant,
+                           val fee: BigDecimal,
+                           val paid: Boolean) : ResourceSupport()
 
-private fun SessionModel.toResource(professionalId: String) = SessionResource(this.number,
-        this.date,
-        this.fee,
-        this.paid).apply {
-    this.add(linkTo(methodOn(OfficeController::class.java).getOffice(professionalId, officeId)).withRel("office"))
-    this.add(linkTo(methodOn(TreatmentController::class.java).getTreatment(professionalId, treatmentId)).withRel("treatment"))
-    this.add(linkTo(methodOn(SessionController::class.java).getSession(professionalId, treatmentId, officeId)).withSelfRel())
+private fun SessionModel.toResource(professionalId: String) = SessionResource(number, date, fee, paid).apply {
+    add(linkTo(methodOn(SessionController::class.java).getSession(professionalId, treatmentId, number)).withSelfRel())
+    add(linkTo(methodOn(OfficeController::class.java).getOffice(professionalId, officeId)).withRel("office"))
+    add(linkTo(methodOn(TreatmentController::class.java).getTreatment(professionalId, treatmentId)).withRel("treatment"))
+    add(linkTo(methodOn(ProfessionalController::class.java).getMySelf(professionalId)).withRel("professional"))
+
 }
