@@ -1,8 +1,8 @@
 package com.jmj.mypatients.model.actions
 
 import com.jmj.mypatients.*
+import com.jmj.mypatients.model.actions.models.PaymentModel
 import com.jmj.mypatients.model.errors.ObjectNotFoundException
-import com.jmj.mypatients.model.money.Money
 import com.jmj.mypatients.model.professional.ProfessionalFinder
 import com.jmj.mypatients.model.professional.account.ProfessionalAccountService
 import com.jmj.mypatients.model.professional.account.derivation.PatientSourceAccounts
@@ -42,17 +42,9 @@ class PayPatientSourceActionTest {
     @Test
     fun `pay to patient source`() {
         val request = givenAnPatientSourcePayment()
-        payPatientSourceAction(request)
-        thenPaymentWasRegistered()
+        val payment = payPatientSourceAction(request)
+        thenPaymentWasRegistered(payment)
     }
-
-    private fun thenPaymentWasRegistered() {
-        val patientSourceAccount = patientSourceAccounts.findByProfessionalAndId(professionalId, patientSourceId)
-        with(patientSourceAccount!!) {
-            Assertions.assertThat(this.paid()).isEqualTo(Money(pay))
-        }
-    }
-
 
     @Test(expected = ObjectNotFoundException::class)
     fun `pay to patient source with invalid office`() {
@@ -64,6 +56,12 @@ class PayPatientSourceActionTest {
     fun `pay to patient source with invalid professional`() {
         val request = givenAnPatientSourcePayment(professional = notExists)
         payPatientSourceAction(request)
+    }
+
+    private fun thenPaymentWasRegistered(payment: PaymentModel) {
+        Assertions.assertThat(payment.date).isEqualTo(now)
+        Assertions.assertThat(payment.amount).isEqualTo(pay)
+
     }
 
     private fun givenAnPatientSourcePayment(professional: String = professionalId, patientSource: String = patientSourceId) =

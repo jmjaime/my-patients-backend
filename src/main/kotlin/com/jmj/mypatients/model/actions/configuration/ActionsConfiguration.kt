@@ -2,6 +2,7 @@ package com.jmj.mypatients.model.actions.configuration
 
 import com.jmj.mypatients.model.actions.*
 import com.jmj.mypatients.model.professional.ProfessionalFinder
+import com.jmj.mypatients.model.professional.account.ProfessionalAccountService
 import com.jmj.mypatients.model.treatment.TreatmentService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -26,5 +27,11 @@ class ActionsConfiguration {
 
     @Bean
     fun findPatientSourcesAction(professionalFinder: ProfessionalFinder) = FindPatientSourcesAction(professionalFinder)
+
+    @Bean
+    fun payOfficeAction(professionalAccountService: ProfessionalAccountService, professionalFinder: ProfessionalFinder) = PayOfficeAction(professionalAccountService, professionalFinder)
+
+    @Bean
+    fun payPatientSourceAction(professionalAccountService: ProfessionalAccountService, professionalFinder: ProfessionalFinder) = PayPatientSourceAction(professionalAccountService, professionalFinder)
 
 }

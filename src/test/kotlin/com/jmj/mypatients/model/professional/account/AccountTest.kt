@@ -13,14 +13,14 @@ class AccountTest {
     fun `add credit should increment credit`() {
         val account = givenAnAccount()
         account.addCredit(moneyOperation)
-        thenAccountHasCredit(account, moneyOperation.value)
+        thenAccountHasCredit(account, moneyOperation.amount)
     }
 
     @Test
     fun `add debit should increment debit`() {
         val account = givenAnAccount()
         account.addDebit(moneyOperation)
-        thenAccountHasDebit(account, moneyOperation.value)
+        thenAccountHasDebit(account, moneyOperation.amount)
     }
 
     private fun thenAccountHasCredit(account: Account, expectedCredit: Money) {
@@ -32,7 +32,7 @@ class AccountTest {
         Assertions.assertThat(movement.date).isEqualTo(moneyOperation.date)
         Assertions.assertThat(movement.movementType).isEqualTo(MovementType.CREDIT)
         Assertions.assertThat(movement.number).isEqualTo(1)
-        Assertions.assertThat(movement.value).isEqualTo(expectedCredit)
+        Assertions.assertThat(movement.amount).isEqualTo(expectedCredit)
     }
 
     private fun thenAccountHasDebit(account: Account, expectedDebit: Money) {
@@ -44,7 +44,7 @@ class AccountTest {
         Assertions.assertThat(movement.date).isEqualTo(moneyOperation.date)
         Assertions.assertThat(movement.movementType).isEqualTo(MovementType.DEBIT)
         Assertions.assertThat(movement.number).isEqualTo(1)
-        Assertions.assertThat(movement.value).isEqualTo(expectedDebit)
+        Assertions.assertThat(movement.amount).isEqualTo(expectedDebit)
     }
 
 

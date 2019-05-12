@@ -17,13 +17,13 @@ data class Account(private var credit: Money = Money.ZERO,
 
     fun addCredit(moneyOperation: MoneyOperation) = Movement.newCredit(nextMovement(), moneyOperation)
             .also {
-                credit += moneyOperation.value
+                credit += moneyOperation.amount
                 movements.add(it)
             }
 
     fun addDebit(moneyOperation: MoneyOperation) = Movement.newDebit(nextMovement(), moneyOperation)
             .also {
-                debit += moneyOperation.value
+                debit += moneyOperation.amount
                 movements.add(it)
             }
 
@@ -31,10 +31,10 @@ data class Account(private var credit: Money = Money.ZERO,
 
 }
 
-data class Movement(val number: Int, val date: Instant, val value: Money, val movementType: MovementType) {
+data class Movement(val number: Int, val date: Instant, val amount: Money, val movementType: MovementType) {
     companion object {
-        fun newCredit(number: Int, moneyOperation: MoneyOperation) = Movement(number, moneyOperation.date, moneyOperation.value, MovementType.CREDIT)
-        fun newDebit(number: Int, moneyOperation: MoneyOperation) = Movement(number, moneyOperation.date, moneyOperation.value, MovementType.DEBIT)
+        fun newCredit(number: Int, moneyOperation: MoneyOperation) = Movement(number, moneyOperation.date, moneyOperation.amount, MovementType.CREDIT)
+        fun newDebit(number: Int, moneyOperation: MoneyOperation) = Movement(number, moneyOperation.date, moneyOperation.amount, MovementType.DEBIT)
     }
 }
 

@@ -29,18 +29,18 @@ class ProfessionalAccountService(private val professionalAccounts: ProfessionalA
         registerNewSession(sessionCreated.professional, sessionCreated.treatment, sessionCreated.sessionNumber)
     }
 
-    fun registerOfficePayment(professional: Professional, office: Office, moneyOperation: MoneyOperation) {
+    fun registerOfficePayment(professional: Professional, office: Office, moneyOperation: MoneyOperation): Movement {
         val professionalAccount = findProfessionalAccount(professional)
         val officeAccount = findOfficeAccountByProfessionalAndId(professional, office.id)
         debitOn(professionalAccount, moneyOperation)
-        payTo(officeAccount, moneyOperation)
+        return payTo(officeAccount, moneyOperation)
     }
 
-    fun registerPatientSourcePayment(professional: Professional, patientSource: PatientSource, moneyOperation: MoneyOperation) {
+    fun registerPatientSourcePayment(professional: Professional, patientSource: PatientSource, moneyOperation: MoneyOperation): Movement {
         val professionalAccount = findProfessionalAccount(professional)
         val patientSourceAccount = findPatientSourceAccountByProfessionalAndId(professional, patientSource.id)
         debitOn(professionalAccount, moneyOperation)
-        payTo(patientSourceAccount, moneyOperation)
+        return payTo(patientSourceAccount, moneyOperation)
     }
 
     fun registerNewSession(professionalId: String, treatmentId: String, sessionNumber: Int) {
@@ -54,20 +54,21 @@ class ProfessionalAccountService(private val professionalAccounts: ProfessionalA
         registerNewSessionOnPatientSourceAccount(professional, session, treatment)
     }
 
-    private fun payTo(officeAccount: OfficeAccount, moneyOperation: MoneyOperation) {
-        officeAccount.pay(moneyOperation)
-        officeAccounts.save(officeAccount)
-    }
+    private fun payTo(officeAccount: OfficeAccount, moneyOperation: MoneyOperation) =
+            officeAccount.pay(moneyOperation).also {
+                officeAccounts.save(officeAccount)
+            }
 
-    private fun debitOn(professionalAccount: ProfessionalAccount, moneyOperation: MoneyOperation) {
-        professionalAccount.addDebit(moneyOperation)
-        professionalAccounts.save(professionalAccount)
-    }
+    private fun debitOn(professionalAccount: ProfessionalAccount, moneyOperation: MoneyOperation) =
+            professionalAccount.addDebit(moneyOperation).also {
+                professionalAccounts.save(professionalAccount)
+            }
 
-    private fun payTo(patientSourceAccount: PatientSourceAccount, moneyOperation: MoneyOperation) {
-        patientSourceAccount.pay(moneyOperation)
-        patientSourceAccounts.save(patientSourceAccount)
-    }
+    private fun payTo(patientSourceAccount: PatientSourceAccount, moneyOperation: MoneyOperation) =
+            patientSourceAccount.pay(moneyOperation).also {
+                patientSourceAccounts.save(patientSourceAccount)
+            }
+
 
     private fun registerNewSessionOnPatientSourceAccount(professional: Professional, session: Session, treatment: Treatment) {
         val patientSourceAccount = findPatientSourceAccountByProfessionalAndId(professional, treatment.derivation.patientSourceId)
