@@ -1,12 +1,12 @@
 package com.jmj.mypatients.model.professional
 
 import com.jmj.mypatients.model.money.Money
-import com.jmj.mypatients.model.professional.account.Account
-import com.jmj.mypatients.model.professional.account.Accounts
 import com.jmj.mypatients.model.professional.account.derivation.PatientSourceAccount
 import com.jmj.mypatients.model.professional.account.derivation.PatientSourceAccounts
 import com.jmj.mypatients.model.professional.account.office.OfficeAccount
 import com.jmj.mypatients.model.professional.account.office.OfficeAccounts
+import com.jmj.mypatients.model.professional.account.professional.ProfessionalAccount
+import com.jmj.mypatients.model.professional.account.professional.ProfessionalAccounts
 import com.jmj.mypatients.model.professional.derivation.PatientSource
 import com.jmj.mypatients.model.professional.derivation.PatientSources
 import com.jmj.mypatients.model.professional.office.Office
@@ -27,7 +27,7 @@ class ProfessionalInitializerTest {
     @Captor
     private lateinit var patientSourceCapture: ArgumentCaptor<PatientSource>
     @Captor
-    private lateinit var accountCapture: ArgumentCaptor<Account>
+    private lateinit var professionalAccountCapture: ArgumentCaptor<ProfessionalAccount>
     @Captor
     private lateinit var officeAccountCapture: ArgumentCaptor<OfficeAccount>
     @Captor
@@ -39,7 +39,7 @@ class ProfessionalInitializerTest {
     @Mock
     private lateinit var patientSources: PatientSources
     @Mock
-    private lateinit var accounts: Accounts
+    private lateinit var professionalAccounts: ProfessionalAccounts
     @Mock
     private lateinit var officeAccounts: OfficeAccounts
     @Mock
@@ -51,7 +51,7 @@ class ProfessionalInitializerTest {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        professionalInitializer = ProfessionalInitializer(professionals, offices, patientSources, accounts, officeAccounts, patientSourceAccounts) { professionalId }
+        professionalInitializer = ProfessionalInitializer(professionals, offices, patientSources, professionalAccounts, officeAccounts, patientSourceAccounts) { professionalId }
     }
 
     @Test
@@ -69,8 +69,8 @@ class ProfessionalInitializerTest {
     }
 
     private fun assertProfessionalAccount(professional: Professional) {
-        Mockito.verify(accounts, Times(1)).save(capture(accountCapture))
-        val account = accountCapture.value
+        Mockito.verify(professionalAccounts, Times(1)).save(capture(professionalAccountCapture))
+        val account = professionalAccountCapture.value
         Assertions.assertThat(account.professionalId).isEqualTo(professional.id)
         Assertions.assertThat(account.credit()).isEqualTo(Money.ZERO)
         Assertions.assertThat(account.debit()).isEqualTo(Money.ZERO)

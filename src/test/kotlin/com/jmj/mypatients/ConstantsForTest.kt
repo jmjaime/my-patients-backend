@@ -1,6 +1,9 @@
 package com.jmj.mypatients
 
 import com.jmj.mypatients.infrastructure.professional.InMemoryProfessionals
+import com.jmj.mypatients.infrastructure.professional.account.InMemoryProfessionalAccounts
+import com.jmj.mypatients.infrastructure.professional.account.derivation.InMemoryPatientSourceAccounts
+import com.jmj.mypatients.infrastructure.professional.account.office.InMemoryOfficeAccounts
 import com.jmj.mypatients.infrastructure.treatment.InMemoryTreatments
 import com.jmj.mypatients.infrastructure.treatment.derivation.InMemoryPatientSources
 import com.jmj.mypatients.infrastructure.treatment.office.InMemoryOffices
@@ -10,7 +13,11 @@ import com.jmj.mypatients.model.professional.Professional
 import com.jmj.mypatients.model.professional.Professionals
 import com.jmj.mypatients.model.professional.account.Account
 import com.jmj.mypatients.model.professional.account.derivation.PatientSourceAccount
+import com.jmj.mypatients.model.professional.account.derivation.PatientSourceAccounts
 import com.jmj.mypatients.model.professional.account.office.OfficeAccount
+import com.jmj.mypatients.model.professional.account.office.OfficeAccounts
+import com.jmj.mypatients.model.professional.account.professional.ProfessionalAccount
+import com.jmj.mypatients.model.professional.account.professional.ProfessionalAccounts
 import com.jmj.mypatients.model.professional.derivation.Derivation
 import com.jmj.mypatients.model.professional.derivation.PatientSource
 import com.jmj.mypatients.model.professional.derivation.PatientSources
@@ -58,13 +65,22 @@ fun createPatientSources(patientSources: List<PatientSource> = listOf(defaultPat
 fun createTreatments(treatments: List<Treatment> = listOf(defaultTreatment())): Treatments =
         InMemoryTreatments().apply { treatments.forEach { save(it) } }
 
+fun createProfessionalAccounts(professionalAccounts: List<ProfessionalAccount> = listOf(defaultProfessionalAccount())): ProfessionalAccounts =
+        InMemoryProfessionalAccounts().apply { professionalAccounts.forEach { save(it) } }
+
+fun createOfficeAccounts(officeAccounts: List<OfficeAccount> = listOf(defaultOfficeAccount())): OfficeAccounts =
+        InMemoryOfficeAccounts().apply { officeAccounts.forEach { save(it) } }
+
+fun createPatientSourceAccounts(patientSourceAccounts: List<PatientSourceAccount> = listOf(defaultPatientSourceAccount())): PatientSourceAccounts =
+        InMemoryPatientSourceAccounts().apply { patientSourceAccounts.forEach { save(it) } }
+
 fun defaultProfessional() = Professional(professionalId, professionalName)
 fun defaultOffice() = Office(officeId, officeName, professionalId, Money(100))
 fun defaultPatientSource() = PatientSource(patientSourceId, patientSourceName, patientSourceFee, patientSourceTax, professionalId)
 fun defaultDerivation() = Derivation(patientSourceId, patientSourceFee)
 fun defaultTreatment() = Treatment(treatmentId, professionalId, defaultPatient(), officeId, defaultDerivation(), mutableListOf())
 fun defaultPatient() = Patient(patientId, patientName)
-fun defaultOfficeAccount() = OfficeAccount(officeAccountId, professionalId, officeId)
-fun defaultPatientSourceAccount() = PatientSourceAccount(patientSourceAccountId, professionalId, patientSourceId)
-fun defaultAccount() = Account(professionalId)
+fun defaultOfficeAccount() = OfficeAccount(officeAccountId, professionalId, officeId, Account())
+fun defaultPatientSourceAccount() = PatientSourceAccount(patientSourceAccountId, professionalId, patientSourceId, Account())
+fun defaultProfessionalAccount() = ProfessionalAccount(professionalId, Account())
 

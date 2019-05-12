@@ -9,6 +9,6 @@ class InMemoryPatientSourceAccounts(private val patientSourceAccounts: MutableMa
 
 
     override fun save(patientSourceAccount: PatientSourceAccount) {
-        patientSourceAccounts[patientSourceAccount.id]
+        patientSourceAccounts[patientSourceAccount.id] = patientSourceAccount
     }
 }

@@ -1,33 +1,23 @@
 package com.jmj.mypatients.model.professional.account.office
 
-import com.jmj.mypatients.model.money.Money
-import java.time.Instant
+import com.jmj.mypatients.model.professional.account.Account
+import com.jmj.mypatients.model.professional.account.MoneyOperation
 
 class OfficeAccount(val id: String,
                     val professionalId: String,
                     val officeId: String,
-                    private var paid: Money = Money.ZERO,
-                    private var used: Money = Money.ZERO,
-                    private val movements: MutableList<OfficeMovement> = mutableListOf()) {
+                    private val account: Account) {
 
-    fun paid() = paid
+    fun paid() = account.debit()
 
-    fun used() = used
+    fun used() = account.credit()
 
-    fun movements() = movements.toList()
+    fun balance() = account.balance()
 
-    fun addOfficeUse(date: Instant, cost: Money, treatment: String, sessionNumber: Int) =
-            Use(nextMovement(), date, cost, treatment, sessionNumber).also {
-                used += cost
-                movements.add(it)
-            }
+    fun movements() = account.movements()
 
-    private fun nextMovement() = movements.size + 1
+    fun pay(moneyOperation: MoneyOperation) = account.addDebit(moneyOperation)
+
+    fun addUse(moneyOperation: MoneyOperation) = account.addCredit(moneyOperation)
 
 }
-
-sealed class OfficeMovement
-data class Use(val number: Int, val date: Instant, val value: Money, val treatment: String, val sessionNumber: Int) : OfficeMovement()
-data class Payment(val number: Int, val date: Instant, val value: Money) : OfficeMovement()
-
-

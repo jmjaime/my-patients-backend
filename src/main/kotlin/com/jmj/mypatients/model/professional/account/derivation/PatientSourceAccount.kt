@@ -1,35 +1,25 @@
 package com.jmj.mypatients.model.professional.account.derivation
 
-import com.jmj.mypatients.model.money.Money
-import java.time.Instant
+import com.jmj.mypatients.model.professional.account.Account
+import com.jmj.mypatients.model.professional.account.MoneyOperation
 
 class PatientSourceAccount(val id: String,
                            val professionalId: String,
                            val patientSourceId: String,
-                           private var paid: Money = Money.ZERO,
-                           private var taxes: Money = Money.ZERO,
-                           private val movements: MutableList<PatientSourceMovement> = mutableListOf()) {
+                           private val account: Account) {
 
-    fun paid() = paid
+    fun paid() = account.debit()
 
-    fun taxes() = taxes
+    fun taxes() = account.credit()
 
-    fun movements() = movements.toList()
+    fun balance() = account.balance()
 
-    fun addSessionCompleted(date: Instant, tax: Money, treatment: String, sessionNumber: Int) =
-            SessionCompleted(nextMovement(), date, tax, treatment, sessionNumber).also {
-                taxes += tax
-                movements.add(it)
-            }
+    fun movements() = account.movements()
 
-    private fun nextMovement() = movements.size + 1
+    fun pay(moneyOperation: MoneyOperation) = account.addDebit(moneyOperation)
 
+    fun addTax(moneyOperation: MoneyOperation) = account.addCredit(moneyOperation)
 }
-
-sealed class PatientSourceMovement
-
-data class SessionCompleted(val number: Int, val date: Instant, val value: Money, val treatment: String, val sessionNumber: Int) : PatientSourceMovement()
-data class Payment(val number: Int, val date: Instant, val value: Money) : PatientSourceMovement()
 
 
 

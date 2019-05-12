@@ -1,33 +1,52 @@
 package com.jmj.mypatients.model.professional.account
 
 import com.jmj.mypatients.model.money.Money
-import com.jmj.mypatients.professionalId
 import org.assertj.core.api.Assertions
 import org.junit.Test
-import java.time.Clock
+import java.time.Instant
 
 class AccountTest {
 
-    private val now = Clock.systemDefaultZone().instant()
-    private val sessionValue = Money(10)
+    private val moneyOperation = MoneyOperation(Money(10), Instant.now())
 
     @Test
     fun `add credit should increment credit`() {
         val account = givenAnAccount()
-        account.addCredit(now, sessionValue)
-        thenAccountHasCredit(account, sessionValue)
+        account.addCredit(moneyOperation)
+        thenAccountHasCredit(account, moneyOperation.value)
+    }
+
+    @Test
+    fun `add debit should increment debit`() {
+        val account = givenAnAccount()
+        account.addDebit(moneyOperation)
+        thenAccountHasDebit(account, moneyOperation.value)
     }
 
     private fun thenAccountHasCredit(account: Account, expectedCredit: Money) {
         Assertions.assertThat(account.credit()).isEqualTo(expectedCredit)
         Assertions.assertThat(account.debit()).isEqualTo(Money.ZERO)
         Assertions.assertThat(account.movements().size).isEqualTo(1)
+        Assertions.assertThat(account.balance()).isEqualTo(expectedCredit)
         val movement = account.movements().first()
-        Assertions.assertThat(movement.date).isEqualTo(now)
+        Assertions.assertThat(movement.date).isEqualTo(moneyOperation.date)
         Assertions.assertThat(movement.movementType).isEqualTo(MovementType.CREDIT)
         Assertions.assertThat(movement.number).isEqualTo(1)
         Assertions.assertThat(movement.value).isEqualTo(expectedCredit)
     }
 
-    private fun givenAnAccount() = Account(professionalId)
+    private fun thenAccountHasDebit(account: Account, expectedDebit: Money) {
+        Assertions.assertThat(account.credit()).isEqualTo(Money.ZERO)
+        Assertions.assertThat(account.debit()).isEqualTo(expectedDebit)
+        Assertions.assertThat(account.movements().size).isEqualTo(1)
+        Assertions.assertThat(account.balance()).isEqualTo(expectedDebit.negate())
+        val movement = account.movements().first()
+        Assertions.assertThat(movement.date).isEqualTo(moneyOperation.date)
+        Assertions.assertThat(movement.movementType).isEqualTo(MovementType.DEBIT)
+        Assertions.assertThat(movement.number).isEqualTo(1)
+        Assertions.assertThat(movement.value).isEqualTo(expectedDebit)
+    }
+
+
+    private fun givenAnAccount() = Account()
 }
