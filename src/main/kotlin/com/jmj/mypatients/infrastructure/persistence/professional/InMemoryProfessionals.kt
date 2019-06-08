@@ -1,7 +1,7 @@
-package com.jmj.mypatients.infrastructure.professional
+package com.jmj.mypatients.infrastructure.persistence.professional
 
-import com.jmj.mypatients.model.professional.Professional
-import com.jmj.mypatients.model.professional.Professionals
+import com.jmj.mypatients.domain.professional.Professional
+import com.jmj.mypatients.domain.professional.Professionals
 
 class InMemoryProfessionals(private val professionals: MutableMap<String, Professional> = mutableMapOf()) : Professionals{
 
