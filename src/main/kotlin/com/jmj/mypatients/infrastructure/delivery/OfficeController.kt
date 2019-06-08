@@ -2,13 +2,13 @@ package com.jmj.mypatients.infrastructure.delivery
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
+import com.jmj.mypatients.actions.FindOfficesAction
+import com.jmj.mypatients.actions.FindOfficesRequest
+import com.jmj.mypatients.actions.PayOfficeAction
+import com.jmj.mypatients.actions.PayOfficeRequest
+import com.jmj.mypatients.actions.models.OfficeModel
+import com.jmj.mypatients.actions.models.PaymentModel
 import com.jmj.mypatients.infrastructure.myPatientsApiV1BasePath
-import com.jmj.mypatients.model.actions.FindOfficesAction
-import com.jmj.mypatients.model.actions.FindOfficesRequest
-import com.jmj.mypatients.model.actions.PayOfficeAction
-import com.jmj.mypatients.model.actions.PayOfficeRequest
-import com.jmj.mypatients.model.actions.models.OfficeModel
-import com.jmj.mypatients.model.actions.models.PaymentModel
 import org.springframework.hateoas.ResourceSupport
 import org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo
 import org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn
@@ -24,7 +24,7 @@ class OfficeController(private val findOfficesAction: FindOfficesAction, private
 
     @GetMapping("/{officeId}")
     @PreAuthorize(PROFESSIONAL_PRE_AUTHORIZE)
-    fun getOffice(@PathVariable professionalId: String, @PathVariable officeId: String) = ResponseEntity.notFound()
+    fun getOffice(@PathVariable professionalId: String, @PathVariable officeId: String) = ResponseEntity.notFound().build<Any>()
 
     @GetMapping
     @PreAuthorize(PROFESSIONAL_PRE_AUTHORIZE)
@@ -35,11 +35,11 @@ class OfficeController(private val findOfficesAction: FindOfficesAction, private
     @PreAuthorize(PROFESSIONAL_PRE_AUTHORIZE)
     fun payToOffice(@PathVariable professionalId: String, @PathVariable officeId: String, @RequestBody officePaymentRequest: OfficePaymentRequest) =
             ResponseEntity.created(payOfficeAction(PayOfficeRequest(professionalId, officeId, officePaymentRequest.value, officePaymentRequest.date))
-                    .toLocation(professionalId, officeId))
+                    .toLocation(professionalId, officeId)).build<Any>()
 
-    @GetMapping("/{officeId}/payments/{payment_number}")
+    @GetMapping("/{officeId}/payments/{paymentNumber}")
     @PreAuthorize(PROFESSIONAL_PRE_AUTHORIZE)
-    fun getOfficePayment(@PathVariable professionalId: String, @PathVariable officeId: String, @PathVariable number: Int) = ResponseEntity.notFound()
+    fun getOfficePayment(@PathVariable professionalId: String, @PathVariable officeId: String, @PathVariable paymentNumber: Int) = ResponseEntity.notFound().build<Any>()
 }
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)

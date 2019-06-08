@@ -2,10 +2,10 @@ package com.jmj.mypatients.infrastructure.delivery
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
+import com.jmj.mypatients.actions.FindProfessionalAction
+import com.jmj.mypatients.actions.FindProfessionalRequest
+import com.jmj.mypatients.actions.models.ProfessionalModel
 import com.jmj.mypatients.infrastructure.myPatientsApiV1BasePath
-import com.jmj.mypatients.model.actions.FindProfessionalAction
-import com.jmj.mypatients.model.actions.FindProfessionalRequest
-import com.jmj.mypatients.model.actions.models.ProfessionalModel
 import org.springframework.hateoas.ResourceSupport
 import org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo
 import org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn

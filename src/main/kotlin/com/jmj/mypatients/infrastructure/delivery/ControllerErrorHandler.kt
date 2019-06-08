@@ -1,7 +1,7 @@
 package com.jmj.mypatients.infrastructure.delivery
 
-import com.jmj.mypatients.model.errors.ObjectAlreadyExistsException
-import com.jmj.mypatients.model.errors.ObjectNotFoundException
+import com.jmj.mypatients.domain.errors.ObjectAlreadyExistsException
+import com.jmj.mypatients.domain.errors.ObjectNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler

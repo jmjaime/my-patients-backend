@@ -2,13 +2,13 @@ package com.jmj.mypatients.infrastructure.delivery
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
+import com.jmj.mypatients.actions.FindTreatmentsAction
+import com.jmj.mypatients.actions.FindTreatmentsRequest
+import com.jmj.mypatients.actions.InitTreatmentAction
+import com.jmj.mypatients.actions.InitTreatmentRequest
+import com.jmj.mypatients.actions.models.TreatmentModel
+import com.jmj.mypatients.actions.models.TreatmentSmallModel
 import com.jmj.mypatients.infrastructure.myPatientsApiV1BasePath
-import com.jmj.mypatients.model.actions.FindTreatmentsAction
-import com.jmj.mypatients.model.actions.FindTreatmentsRequest
-import com.jmj.mypatients.model.actions.InitTreatmentAction
-import com.jmj.mypatients.model.actions.InitTreatmentRequest
-import com.jmj.mypatients.model.actions.models.TreatmentModel
-import com.jmj.mypatients.model.actions.models.TreatmentSmallModel
 import org.springframework.hateoas.ResourceSupport
 import org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo
 import org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn

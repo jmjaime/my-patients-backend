@@ -3,10 +3,10 @@ package com.jmj.mypatients.infrastructure.delivery
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
+import com.jmj.mypatients.actions.AddSessionAction
+import com.jmj.mypatients.actions.AddSessionRequest
+import com.jmj.mypatients.actions.models.SessionModel
 import com.jmj.mypatients.infrastructure.myPatientsApiV1BasePath
-import com.jmj.mypatients.model.actions.AddSessionAction
-import com.jmj.mypatients.model.actions.AddSessionRequest
-import com.jmj.mypatients.model.actions.models.SessionModel
 import org.springframework.hateoas.ResourceSupport
 import org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo
 import org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn

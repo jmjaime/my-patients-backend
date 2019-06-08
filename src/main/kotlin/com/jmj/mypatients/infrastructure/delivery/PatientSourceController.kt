@@ -2,13 +2,13 @@ package com.jmj.mypatients.infrastructure.delivery
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
+import com.jmj.mypatients.actions.FindPatientSourcesAction
+import com.jmj.mypatients.actions.FindProfessionalRequest
+import com.jmj.mypatients.actions.PayPatientSourceAction
+import com.jmj.mypatients.actions.PayPatientSourceRequest
+import com.jmj.mypatients.actions.models.PatientSourceModel
+import com.jmj.mypatients.actions.models.PaymentModel
 import com.jmj.mypatients.infrastructure.myPatientsApiV1BasePath
-import com.jmj.mypatients.model.actions.FindPatientSourcesAction
-import com.jmj.mypatients.model.actions.FindProfessionalRequest
-import com.jmj.mypatients.model.actions.PayPatientSourceAction
-import com.jmj.mypatients.model.actions.PayPatientSourceRequest
-import com.jmj.mypatients.model.actions.models.PatientSourceModel
-import com.jmj.mypatients.model.actions.models.PaymentModel
 import org.springframework.hateoas.ResourceSupport
 import org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo
 import org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn
@@ -24,7 +24,7 @@ class PatientSourceController(private val findPatientSourcesAction: FindPatientS
 
     @GetMapping("/{patientSourceId}")
     @PreAuthorize(PROFESSIONAL_PRE_AUTHORIZE)
-    fun getPatientSource(@PathVariable professionalId: String, @PathVariable patientSourceId: String) = ResponseEntity.notFound()
+    fun getPatientSource(@PathVariable professionalId: String, @PathVariable patientSourceId: String) = ResponseEntity.notFound().build<Any>()
 
     @GetMapping
     @PreAuthorize(PROFESSIONAL_PRE_AUTHORIZE)
@@ -35,11 +35,11 @@ class PatientSourceController(private val findPatientSourcesAction: FindPatientS
     @PreAuthorize(PROFESSIONAL_PRE_AUTHORIZE)
     fun payToPatientSource(@PathVariable professionalId: String, @PathVariable patientSourceId: String, @RequestBody patientSourcePaymentRequest: PatientSourcePaymentRequest) =
             ResponseEntity.created(payPatientSourceAction(PayPatientSourceRequest(professionalId, patientSourceId, patientSourcePaymentRequest.value, patientSourcePaymentRequest.date))
-                    .toLocation(professionalId, patientSourceId))
+                    .toLocation(professionalId, patientSourceId)).build<Any>()
 
-    @GetMapping("/{patientSourceId}/payments/{payment_number}")
+    @GetMapping("/{patientSourceId}/payments/{paymentNumber}")
     @PreAuthorize(PROFESSIONAL_PRE_AUTHORIZE)
-    fun getPatientSourcePayment(@PathVariable professionalId: String, @PathVariable patientSourceId: String, @PathVariable number: Int) = ResponseEntity.notFound()
+    fun getPatientSourcePayment(@PathVariable professionalId: String, @PathVariable patientSourceId: String, @PathVariable paymentNumber: Int) = ResponseEntity.notFound().build<Any>()
 }
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
