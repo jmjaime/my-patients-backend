@@ -12,7 +12,7 @@ data class Treatment(val id: String,
                      val patient: Patient,
                      val defaultOfficeId: String,
                      val derivation: Derivation,
-                     private val sessions: MutableList<Session> = mutableListOf()) {
+                     private var sessions: List<Session> = listOf()) {
 
     init {
         require(id.isNotBlank()) { "Id can not be blank" }
@@ -23,13 +23,20 @@ data class Treatment(val id: String,
     fun addSession(date: Instant, officeId: String = defaultOfficeId, fee: Money, paid: Boolean = false): Session {
         val sessionNumber = sessions.size + 1
         return Session(sessionNumber, date, officeId, fee, paid).also {
-            sessions.add(it)
+           sessions = sessions + it
         }
     }
 
-    fun sessions() = listOf(sessions)
+    fun sessions() = sessions.toList()
 
     fun getSession(sessionNumber: Int) = sessions.firstOrNull { it.number == sessionNumber }
             ?: throw ObjectNotFoundException("Session $sessionNumber not found")
+
+    fun getSessionsNotPaid() = sessions.filter { !it.paid }
+
+    fun markAsPaid(sessionsToPay: List<Session>) {
+        check(getSessionsNotPaid().containsAll(sessionsToPay)) {"Invalid sessions to mark as paid"}
+        sessions = sessions.map { if (it in sessionsToPay) it.copy(paid=true) else it }
+    }
 
 }

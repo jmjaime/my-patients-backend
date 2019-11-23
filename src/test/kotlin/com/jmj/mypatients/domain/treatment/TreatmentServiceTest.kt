@@ -53,7 +53,7 @@ class TreatmentServiceTest {
 
     private fun assertNewSession(treatment: Treatment, session: Session) {
         assertThat(session).isNotNull
-        assertThat(treatment.sessions()).containsExactly(mutableListOf(session))
+        assertThat(treatment.sessions()).containsExactly(session)
         assertThat(session.date).isEqualTo(date)
         assertThat(session.fee).isEqualTo(patientSourceFee)
         assertThat(session.officeId).isEqualTo(officeId)

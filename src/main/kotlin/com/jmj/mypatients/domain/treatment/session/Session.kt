@@ -3,6 +3,7 @@ package com.jmj.mypatients.domain.treatment.session
 import com.jmj.mypatients.domain.money.Money
 import java.time.Instant
 
+// TODO: add total money
 data class Session(val number: Int,
                    val date: Instant,
                    val officeId: String,

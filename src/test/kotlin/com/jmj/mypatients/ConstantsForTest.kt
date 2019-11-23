@@ -18,6 +18,7 @@ import com.jmj.mypatients.domain.professional.office.Office
 import com.jmj.mypatients.domain.professional.office.Offices
 import com.jmj.mypatients.domain.treatment.Treatment
 import com.jmj.mypatients.domain.treatment.Treatments
+import com.jmj.mypatients.domain.treatment.session.Session
 import com.jmj.mypatients.infrastructure.persistence.professional.InMemoryProfessionals
 import com.jmj.mypatients.infrastructure.persistence.professional.account.InMemoryProfessionalAccounts
 import com.jmj.mypatients.infrastructure.persistence.professional.account.derivation.InMemoryPatientSourceAccounts
@@ -26,6 +27,7 @@ import com.jmj.mypatients.infrastructure.persistence.treatment.InMemoryTreatment
 import com.jmj.mypatients.infrastructure.persistence.treatment.derivation.InMemoryPatientSources
 import com.jmj.mypatients.infrastructure.persistence.treatment.office.InMemoryOffices
 import java.math.BigDecimal.TEN
+import java.time.Instant
 
 const val notExists = "XXX"
 
@@ -78,9 +80,10 @@ fun defaultProfessional() = Professional(professionalId, professionalName)
 fun defaultOffice() = Office(officeId, officeName, professionalId, Money(100))
 fun defaultPatientSource() = PatientSource(patientSourceId, patientSourceName, patientSourceFee, patientSourceTax, professionalId)
 fun defaultDerivation() = Derivation(patientSourceId, patientSourceFee)
-fun defaultTreatment() = Treatment(treatmentId, professionalId, defaultPatient(), officeId, defaultDerivation(), mutableListOf())
+fun defaultTreatment(sessions: List<Session> = listOf()) = Treatment(treatmentId, professionalId, defaultPatient(), officeId, defaultDerivation(), sessions)
 fun defaultPatient() = Patient(patientId, patientName)
 fun defaultOfficeAccount() = OfficeAccount(officeAccountId, professionalId, officeId, Account())
 fun defaultPatientSourceAccount() = PatientSourceAccount(patientSourceAccountId, professionalId, patientSourceId, Account())
 fun defaultProfessionalAccount() = ProfessionalAccount(professionalId, Account())
+fun defaultSession(number:Int, paid: Boolean = false) = Session(number, Instant.now(), officeId, Money.ZERO, paid)
 

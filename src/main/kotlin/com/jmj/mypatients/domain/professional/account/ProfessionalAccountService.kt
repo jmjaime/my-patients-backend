@@ -43,6 +43,17 @@ class ProfessionalAccountService(private val professionalAccounts: ProfessionalA
         return payTo(patientSourceAccount, moneyOperation)
     }
 
+    fun registerSessionsPayment(professional: Professional, treatmentId: String, sessions: Set<Int>, moneyOperation: MoneyOperation): Movement {
+        val professionalAccount = findProfessionalAccount(professional)
+        val treatment = professionalFinder.findTreatmentByProfessionalAndId(professional, treatmentId)
+        val sessionsNoPaid = treatment.getSessionsNotPaid()
+        val sessionsToPay = sessionsNoPaid.filter { it.number in sessions }
+        check(sessionsToPay.size == sessions.size) { "Sessions ${sessions - sessionsToPay.map { it.number }} not found to pay" }
+        // TODO: check total to pay
+        treatment.markAsPaid(sessionsToPay)
+        return payTo(professionalAccount, moneyOperation)
+    }
+
     fun registerNewSession(professionalId: String, treatmentId: String, sessionNumber: Int) {
         // TODO: change parameters to domain objects
         val professional = professionalFinder.findProfessionalById(professionalId)
@@ -69,6 +80,10 @@ class ProfessionalAccountService(private val professionalAccounts: ProfessionalA
                 patientSourceAccounts.save(patientSourceAccount)
             }
 
+    private fun payTo(professionalAccount: ProfessionalAccount, moneyOperation: MoneyOperation) =
+            professionalAccount.addCredit(moneyOperation).also {
+                professionalAccounts.save(professionalAccount)
+            }
 
     private fun registerNewSessionOnPatientSourceAccount(professional: Professional, session: Session, treatment: Treatment) {
         val patientSourceAccount = findPatientSourceAccountByProfessionalAndId(professional, treatment.derivation.patientSourceId)
