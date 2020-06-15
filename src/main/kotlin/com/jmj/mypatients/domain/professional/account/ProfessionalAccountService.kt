@@ -13,8 +13,8 @@ import com.jmj.mypatients.domain.professional.account.professional.ProfessionalA
 import com.jmj.mypatients.domain.professional.account.professional.ProfessionalAccounts
 import com.jmj.mypatients.domain.professional.derivation.PatientSource
 import com.jmj.mypatients.domain.professional.office.Office
+import com.jmj.mypatients.domain.session.Session
 import com.jmj.mypatients.domain.treatment.Treatment
-import com.jmj.mypatients.domain.treatment.session.Session
 import java.time.Clock
 
 class ProfessionalAccountService(private val professionalAccounts: ProfessionalAccounts,

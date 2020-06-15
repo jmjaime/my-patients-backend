@@ -4,7 +4,7 @@ import com.jmj.mypatients.*
 import com.jmj.mypatients.domain.errors.ObjectAlreadyExistsException
 import com.jmj.mypatients.domain.events.EventPublisher
 import com.jmj.mypatients.domain.events.SessionCreated
-import com.jmj.mypatients.domain.treatment.session.Session
+import com.jmj.mypatients.domain.session.Session
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test

@@ -4,7 +4,7 @@ import com.jmj.mypatients.domain.errors.ObjectNotFoundException
 import com.jmj.mypatients.domain.money.Money
 import com.jmj.mypatients.domain.patient.Patient
 import com.jmj.mypatients.domain.professional.derivation.Derivation
-import com.jmj.mypatients.domain.treatment.session.Session
+import com.jmj.mypatients.domain.session.Session
 import java.time.Instant
 
 data class Treatment(val id: String,

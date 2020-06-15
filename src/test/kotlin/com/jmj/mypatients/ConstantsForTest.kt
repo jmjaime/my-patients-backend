@@ -18,7 +18,7 @@ import com.jmj.mypatients.domain.professional.office.Office
 import com.jmj.mypatients.domain.professional.office.Offices
 import com.jmj.mypatients.domain.treatment.Treatment
 import com.jmj.mypatients.domain.treatment.Treatments
-import com.jmj.mypatients.domain.treatment.session.Session
+import com.jmj.mypatients.domain.session.Session
 import com.jmj.mypatients.infrastructure.persistence.professional.InMemoryProfessionals
 import com.jmj.mypatients.infrastructure.persistence.professional.account.InMemoryProfessionalAccounts
 import com.jmj.mypatients.infrastructure.persistence.professional.account.derivation.InMemoryPatientSourceAccounts

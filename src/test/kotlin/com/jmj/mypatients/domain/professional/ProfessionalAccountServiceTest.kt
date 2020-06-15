@@ -1,8 +1,9 @@
-package com.jmj.mypatients.domain.professional.account
+package com.jmj.mypatients.domain.professional
 
 import com.jmj.mypatients.*
 import com.jmj.mypatients.domain.money.Money
-import com.jmj.mypatients.domain.professional.ProfessionalFinder
+import com.jmj.mypatients.domain.professional.account.MoneyOperation
+import com.jmj.mypatients.domain.professional.account.ProfessionalAccountService
 import com.jmj.mypatients.domain.professional.account.derivation.PatientSourceAccount
 import com.jmj.mypatients.domain.professional.account.derivation.PatientSourceAccounts
 import com.jmj.mypatients.domain.professional.account.office.OfficeAccount

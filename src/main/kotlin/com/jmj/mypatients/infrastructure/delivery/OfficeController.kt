@@ -1,7 +1,5 @@
 package com.jmj.mypatients.infrastructure.delivery
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
-import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.jmj.mypatients.actions.FindOfficesAction
 import com.jmj.mypatients.actions.FindOfficesRequest
 import com.jmj.mypatients.actions.PayOfficeAction
@@ -9,7 +7,6 @@ import com.jmj.mypatients.actions.PayOfficeRequest
 import com.jmj.mypatients.actions.models.OfficeModel
 import com.jmj.mypatients.actions.models.PaymentModel
 import com.jmj.mypatients.infrastructure.myPatientsApiV1BasePath
-import org.springframework.hateoas.ResourceSupport
 import org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo
 import org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn
 import org.springframework.http.ResponseEntity
@@ -29,7 +26,7 @@ class OfficeController(private val findOfficesAction: FindOfficesAction, private
     @GetMapping
     @PreAuthorize(PROFESSIONAL_PRE_AUTHORIZE)
     fun getOffices(@PathVariable professionalId: String) =
-            ResponseEntity.ok(findOfficesAction(FindOfficesRequest(professionalId)).map { it.toResource(professionalId) })
+            ResponseEntity.ok(findOfficesAction(FindOfficesRequest(professionalId)).map { it.toResource() })
 
     @PostMapping("/{officeId}/payments")
     @PreAuthorize(PROFESSIONAL_PRE_AUTHORIZE)
@@ -42,15 +39,11 @@ class OfficeController(private val findOfficesAction: FindOfficesAction, private
     fun getOfficePayment(@PathVariable professionalId: String, @PathVariable officeId: String, @PathVariable paymentNumber: Int) = ResponseEntity.notFound().build<Any>()
 }
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
 data class OfficePaymentRequest(val value: BigDecimal, val date: Instant)
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
-data class OfficeResource(val id: String, val description: String) : ResourceSupport()
+data class OfficeResource(val id: String, val name: String)
 
-private fun OfficeModel.toResource(professionalId: String) = OfficeResource(id, description).apply {
-    add(linkTo(methodOn(OfficeController::class.java).getOffice(professionalId, id)).withSelfRel())
-}
+private fun OfficeModel.toResource() = OfficeResource(id, name)
 
 private fun PaymentModel.toLocation(professionalId: String, officeId: String) =
         linkTo(methodOn(OfficeController::class.java).getOfficePayment(professionalId, officeId, this.number)).toUri()

@@ -1,6 +1,6 @@
 package com.jmj.mypatients.actions.models
 
-import com.jmj.mypatients.domain.treatment.session.Session
+import com.jmj.mypatients.domain.session.Session
 import java.math.BigDecimal
 import java.time.Instant
 

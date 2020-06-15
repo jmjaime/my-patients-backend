@@ -1,7 +1,5 @@
 package com.jmj.mypatients.infrastructure.delivery
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
-import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.jmj.mypatients.actions.FindPatientSourcesAction
 import com.jmj.mypatients.actions.FindProfessionalRequest
 import com.jmj.mypatients.actions.PayPatientSourceAction
@@ -9,7 +7,6 @@ import com.jmj.mypatients.actions.PayPatientSourceRequest
 import com.jmj.mypatients.actions.models.PatientSourceModel
 import com.jmj.mypatients.actions.models.PaymentModel
 import com.jmj.mypatients.infrastructure.myPatientsApiV1BasePath
-import org.springframework.hateoas.ResourceSupport
 import org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo
 import org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn
 import org.springframework.http.ResponseEntity
@@ -29,7 +26,7 @@ class PatientSourceController(private val findPatientSourcesAction: FindPatientS
     @GetMapping
     @PreAuthorize(PROFESSIONAL_PRE_AUTHORIZE)
     fun getPatientSources(@PathVariable professionalId: String) =
-            ResponseEntity.ok(findPatientSourcesAction(FindProfessionalRequest(professionalId)).map { it.toResource(professionalId) })
+            ResponseEntity.ok(findPatientSourcesAction(FindProfessionalRequest(professionalId)))
 
     @PostMapping("/{patientSourceId}/payments")
     @PreAuthorize(PROFESSIONAL_PRE_AUTHORIZE)
@@ -42,15 +39,7 @@ class PatientSourceController(private val findPatientSourcesAction: FindPatientS
     fun getPatientSourcePayment(@PathVariable professionalId: String, @PathVariable patientSourceId: String, @PathVariable paymentNumber: Int) = ResponseEntity.notFound().build<Any>()
 }
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
 data class PatientSourcePaymentRequest(val value: BigDecimal, val date: Instant)
-
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
-data class PatientSourceResource(val id: String, val source: String, val fee: BigDecimal, val tax: BigDecimal) : ResourceSupport()
-
-private fun PatientSourceModel.toResource(professionalId: String) = PatientSourceResource(id, source, fee, tax).apply {
-    add(linkTo(methodOn(PatientSourceController::class.java).getPatientSource(professionalId, id)).withSelfRel())
-}
 
 private fun PaymentModel.toLocation(professionalId: String, patientSourceId: String) =
         linkTo(methodOn(PatientSourceController::class.java).getPatientSourcePayment(professionalId, patientSourceId, this.number)).toUri()

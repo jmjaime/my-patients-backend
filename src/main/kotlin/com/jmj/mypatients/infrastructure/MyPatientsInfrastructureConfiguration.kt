@@ -1,6 +1,7 @@
 package com.jmj.mypatients.infrastructure
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
@@ -22,6 +23,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.time.Clock
 
 const val myPatientsApiV1BasePath = "/api/v1/my-patients/{professionalId}"
@@ -29,7 +31,7 @@ const val myPatientsApiV1BasePath = "/api/v1/my-patients/{professionalId}"
 @Configuration
 class MyPatientsInfrastructureConfiguration {
 
-    private val ids = SecuenceIdGenerator()
+    private val ids = SequenceGenerator()
 
     @Bean
     fun idGenerator(): () -> String = { ids.next().toString() }
@@ -49,6 +51,7 @@ class MyPatientsInfrastructureConfiguration {
     @Bean
     fun objectMapper(): ObjectMapper =
             ObjectMapper()
+                    .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
                     .registerModule(JavaTimeModule())
                     .registerModule(ParameterNamesModule())
                     .registerModule(Jdk8Module())
@@ -67,14 +70,14 @@ class ProfessionalDataTestInitializer(private val professionalInitializer: Profe
     override fun run(vararg args: String?) {
         val professionals = professionalInitializer.newProfessional("Jose")
         with(userDetailsService as MyPatientsUserDetailsService) {
-            addUser(MyPatientUser("user", "{noop}password",
+            addUser(MyPatientUser("user",  "{bcrypt}"+BCryptPasswordEncoder().encode("password"),
                     listOf(SimpleGrantedAuthority(Role.PROFESSIONAL.name)), professionals.id))
         }
     }
 
 }
 
-class SecuenceIdGenerator(private var nextId: Int = 0) {
+class SequenceGenerator(private var nextId: Int = 0) {
     fun next(): Int {
         nextId += 1
         return nextId

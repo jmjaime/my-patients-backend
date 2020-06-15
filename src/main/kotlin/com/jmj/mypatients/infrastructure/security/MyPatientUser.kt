@@ -13,6 +13,8 @@ class MyPatientUser(username: String, password: String,
 
     private fun validProfessional(authorities: Collection<GrantedAuthority>) =
             !authorities.contains(SimpleGrantedAuthority(Role.PROFESSIONAL.name)) || professionalId != null
+
+    fun copy() = MyPatientUser(this.username, this.password, this.authorities, this.professionalId)
 }
 
 enum class Role {

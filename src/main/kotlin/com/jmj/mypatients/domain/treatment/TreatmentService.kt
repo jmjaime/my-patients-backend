@@ -9,7 +9,7 @@ import com.jmj.mypatients.domain.professional.Professional
 import com.jmj.mypatients.domain.professional.derivation.Derivation
 import com.jmj.mypatients.domain.professional.derivation.PatientSource
 import com.jmj.mypatients.domain.professional.office.Office
-import com.jmj.mypatients.domain.treatment.session.Session
+import com.jmj.mypatients.domain.session.Session
 import java.time.Instant
 
 class TreatmentService(private val treatments: Treatments, private val eventPublisher: EventPublisher, private val idGenerator: () -> String) {

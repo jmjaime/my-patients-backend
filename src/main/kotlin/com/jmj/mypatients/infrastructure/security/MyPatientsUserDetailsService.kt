@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 
 class MyPatientsUserDetailsService(private val users: MutableMap<String, MyPatientUser>) : UserDetailsService {
 
-    override fun loadUserByUsername(username: String?): UserDetails = users[username!!]
+    override fun loadUserByUsername(username: String?): UserDetails = users[username!!]?.copy()
             ?: throw UsernameNotFoundException(username)
 
     fun addUser(newUser: MyPatientUser) {

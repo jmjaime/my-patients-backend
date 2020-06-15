@@ -1,4 +1,4 @@
-package com.jmj.mypatients.domain.treatment.session
+package com.jmj.mypatients.domain.session
 
 import com.jmj.mypatients.domain.money.Money
 import java.time.Instant

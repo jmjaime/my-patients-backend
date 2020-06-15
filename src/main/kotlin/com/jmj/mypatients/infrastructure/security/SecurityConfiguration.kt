@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 
 @Configuration
@@ -25,7 +26,7 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter() {
 
     @Bean
     override fun userDetailsService(): UserDetailsService {
-        val user = mutableMapOf(Pair("admin", MyPatientUser("admin", "{noop}admin",
+        val user = mutableMapOf(Pair("admin", MyPatientUser("admin", "{bcrypt}"+BCryptPasswordEncoder().encode("admin"),
                         listOf(SimpleGrantedAuthority(Role.ADMIN.name)))))
         return MyPatientsUserDetailsService(user)
     }

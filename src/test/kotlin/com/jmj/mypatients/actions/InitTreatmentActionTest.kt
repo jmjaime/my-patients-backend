@@ -51,7 +51,7 @@ class InitTreatmentActionTest {
     private fun assertTreatment(treatment: TreatmentModel) {
         Assertions.assertThat(treatment.id).isEqualTo(treatmentId)
         Assertions.assertThat(treatment.office.id).isEqualTo(officeId)
-        Assertions.assertThat(treatment.office.description).isEqualTo(officeName)
+        Assertions.assertThat(treatment.office.name).isEqualTo(officeName)
         Assertions.assertThat(treatment.patient).isEqualTo(patientName)
         Assertions.assertThat(treatment.derivation.patientSourceId).isEqualTo(patientSourceId)
         Assertions.assertThat(treatment.derivation.currentFee).isEqualTo(patientSourceFee.value)

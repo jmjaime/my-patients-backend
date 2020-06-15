@@ -1,6 +1,9 @@
-package com.jmj.mypatients.domain.professional.account
+package com.jmj.mypatients.domain.professional
 
 import com.jmj.mypatients.domain.money.Money
+import com.jmj.mypatients.domain.professional.account.Account
+import com.jmj.mypatients.domain.professional.account.MoneyOperation
+import com.jmj.mypatients.domain.professional.account.MovementType
 import org.assertj.core.api.Assertions
 import org.junit.Test
 import java.time.Instant
